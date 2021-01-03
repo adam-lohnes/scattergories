@@ -1,0 +1,697 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<!-- Created for educational purposes only -->
+	<!-- December 2020 - Adam A. Lohnes - adam.a.lohnes@gmail.com -->
+	<title>Scattergories! by Adam Lohnes</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Roboto&display=swap" rel="stylesheet">
+	<style type="text/css">
+		html {
+			background: #600;
+		}
+
+		body {
+			background: #c00;
+			background-image: linear-gradient(#e00,#900);
+			box-shadow: 0 0 20px #400;
+			max-width: 600px;
+			font-family: 'Roboto', sans-serif;
+			text-align: center;
+			margin: 0 auto;
+			min-height: 95vh;
+		}
+
+		header {
+			padding-top: 20px;
+			position: relative;
+		}
+
+		main {
+			padding-bottom: 5vh;
+		}
+
+		h1 {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -25%);
+			font-family: 'Alfa Slab One', cursive;
+			font-size: 55px;
+			color: white;
+			-webkit-text-stroke: 1px black;
+			text-shadow: 0px 0px 10px black;
+			letter-spacing: 2px;
+			margin: 0;
+			width: 100%;
+		}
+
+		.btn {
+			margin: 20px;
+			background: gold;
+			border: 2px solid #333;
+			border-radius: 5px;
+			width: 200px;
+			height: 50px;
+			font-size: 24px;
+			font-weight: bold;
+		}
+
+		#copyBtn {
+			width: 50px;
+			height: 50px;
+			border-radius: 10px;
+			margin-left: 0;
+			position: relative;
+		}
+
+		#copiedPopup {
+			background: #333;
+			color: #CCC;
+			border-radius: 3px;
+			font-size: 10px;
+			position: absolute;
+			top: 25%;
+			left: 75%;
+			padding: 3px;
+			display: none;
+		}
+
+		#listBtns {
+			display: flex;
+			justify-content: center;
+		}
+
+		#playBoxes {
+			display: flex;
+			align-content: center;
+			justify-content: center;
+		}
+
+		.playBoxModule {
+			width: 250px;
+		}
+
+		.playBox {
+			background: #CCC;
+			color: #333;
+			font-size: 40px;
+			font-weight: bold;
+			line-height: 100px;
+			border: 0px solid #333;
+			border-radius: 30px;
+			margin: 10px auto;
+			height: 100px;
+			box-shadow: inset 2px 2px 3px grey;
+		}
+
+		#letter {
+			width: 100px;
+		}
+
+		#timer {
+			width: 200px;
+		}
+
+		#listItems {
+			background: #CCC;
+			border-radius: 10px;
+			max-width: 400px;
+			min-height: 100px;
+			margin: auto;
+			padding: 15px;
+			box-shadow: inset 2px 2px 3px grey;
+		}
+
+		#listItems li {
+			background: #DDD;
+			border-radius: 10px;
+			margin: 5px 0;
+			font-size: 24px;
+			box-shadow: inset 1px 1px 2px grey;
+			text-transform: capitalize;
+		}
+
+		#allItems {
+			display: none;
+			background: #EEE;
+			height: 25vh;
+			width: 25vw;
+			overflow: scroll;
+			margin: auto;
+			border-radius: 10px;
+			padding: 15px;
+		}
+
+		footer {
+			position: fixed;
+			width: 100%;
+			left: 0;
+			bottom: 0;
+			background: #333;
+			background-image: linear-gradient(#333,#000);
+			color: #CCC;
+			font-style: italic;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			height: 5vh;
+			min-height: 25px;
+		}
+
+		footer p {
+			padding: 0px 20px;
+		}
+
+		#listToCopy {
+			position: relative;
+			top: 1000px;
+		}
+
+		.info {
+			user-select: none;
+			cursor: pointer;
+			width: 20px;
+			height: 20px;
+			background: #CCC;
+			color: #333;
+			text-align: center;
+			border-radius: 50%;
+			font-size: 16px;
+			line-height: 20px;
+			font-style: normal;
+			font-weight: bold;
+			margin-right: 20px;
+		}
+
+		#versionLog {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: rgba(0,0,0,0.5);
+			height: 100vh;
+			width: 100vw;
+			z-index: 100;
+		}
+
+		#versionLogBox {
+			background: #333;
+			border: 1px solid #CCC;
+			border-radius: 10px;
+			padding: 10px 25px;
+			max-height: 50%;
+			overflow: scroll;
+			margin: auto;
+			text-align: left;
+			box-shadow: 0 0 25px black;
+		}
+
+		#versionLogBox::-webkit-scrollbar {
+			display: none;
+		}
+
+		h4 {
+			margin: 0;
+		}
+
+		.version {
+			background: #666;
+			border-radius: 10px;
+			padding: 10px;
+			margin-bottom: 10px;
+		    box-shadow: 3px 5px black;
+		}
+
+		#closeVersions {
+			user-select: none;
+			cursor: pointer;
+			position: relative;
+			float: right;
+			font-size: 30px;
+			font-style: normal;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<img src="https://play-lh.googleusercontent.com/fdg7CSbIxPIFbL9SHfgJpmZgVHXtPZFhidOCvHwIJYzzHJc19xY93FXQzW6wdwGyLpc" width="150">
+		<h1>Scattergories!</h1>
+	</header>
+	<main>
+		<div id="playBoxes">
+			<div id="letterRoller" class="playBoxModule">
+				<button id="letterBtn" class="btn" onclick="rollLetter()">Roll a Letter</button>
+				<div id="letter" class="playBox"></div>
+				<audio id="diceFX" preload="auto">
+					<source src="http://www.superluigibros.com/downloads/sounds/PC/MARIOSFUNDAMENTALS/WAVS/Rolling%20Dice.wav" type="audio/wav">
+				</audio>
+			</div>
+			<div id="playTimer" class="playBoxModule">
+				<button id="timerBtn" class="btn" onclick="startStopCountdown()">Start Timer</button>
+				<div id="timer" class="playBox">3:00</div>
+				<audio id="ding" preload="auto">
+					<source src="https://www.soundjay.com/misc/bell-ringing-04.mp3" type="audio/mp3">
+				</audio>
+			</div>
+		</div>
+		
+		<div id="listBtns">
+			<button id="listBtn" class="btn" onclick="generateList()">Generate a List</button>
+			<button id="copyBtn" class="btn" onclick="copyListToClipboard()">
+				<img src="https://cdn2.iconfinder.com/data/icons/ui-kit-developer-glyphs/16/GlyphIcons-Clipboard-512.png" height="30px">
+				<div id="copiedPopup">Copied to Clipboard!</div>
+		</div>
+		</button>
+		<div id="listItems">	
+			<ol id="generatedList">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ol>
+			<audio id="listShuffle" preload="audio">
+				<source src="https://www.soundjay.com/misc/shuffling-cards-4.mp3" type="audio/mp3">
+			</audio>
+		</div>
+
+		<div id="allItems" style="">
+			<ol id="allListItems">
+				<li>A Boy's Name</li>
+				<li>U.s. Cities</li>
+				<li>Things That Are Cold</li>
+				<li>School Supplies</li>
+				<li>Pro Sports Teams</li>
+				<li>Insects</li>
+				<li>Breakfast Foods</li>
+				<li>Furniture</li>
+				<li>Tv Shows</li>
+				<li>Things Found In The Ocean</li>
+				<li>Presidents</li>
+				<li>Product Names</li>
+				<li>Vegetables</li>
+				<li>States</li>
+				<li>Things You Throw Away</li>
+				<li>Occupations</li>
+				<li>Appliances</li>
+				<li>Cartoon Characters</li>
+				<li>Types Of Drink</li>
+				<li>Musical Groups</li>
+				<li>Store Names</li>
+				<li>Things At A Football Game</li>
+				<li>Trees</li>
+				<li>Personality Traits</li>
+				<li>Articles Of Clothing</li>
+				<li>Desserts</li>
+				<li>Car Parts</li>
+				<li>Things Found On A Map</li>
+				<li>Athletes</li>
+				<li>4-letter Words</li>
+				<li>Items In A Refrigerator</li>
+				<li>Farm Animals</li>
+				<li>Street Names</li>
+				<li>Things At The Beach</li>
+				<li>Colors</li>
+				<li>Tools</li>
+				<li>Sports</li>
+				<li>Song Titles</li>
+				<li>Parts Of The Body</li>
+				<li>Ethnic Foods</li>
+				<li>Things You Shout</li>
+				<li>Birds</li>
+				<li>A Girl's Name</li>
+				<li>Ways To Get From Here To There</li>
+				<li>Items In A Kitchen</li>
+				<li>Villains / Monsters</li>
+				<li>Flowers</li>
+				<li>Things You Replace</li>
+				<li>Sandwiches</li>
+				<li>Items In A Catalog</li>
+				<li>World Leaders / Politicians</li>
+				<li>School Subjects</li>
+				<li>Excuses For Being Late</li>
+				<li>Ice Cream Flavors</li>
+				<li>Things That Jump / Bounce</li>
+				<li>Television Stars</li>
+				<li>Things In A Park</li>
+				<li>Foreign Cities</li>
+				<li>Stones / Gems</li>
+				<li>Musical Instruments</li>
+				<li>Things That Are Sticky</li>
+				<li>Awards / Ceremonies</li>
+				<li>Cars</li>
+				<li>Spices / Herbs</li>
+				<li>Bad Habits</li>
+				<li>Cosmetics / Toiletries</li>
+				<li>Celebrities</li>
+				<li>Cooking Utensils</li>
+				<li>Reptiles / Amphibians</li>
+				<li>Parks</li>
+				<li>Leisure Activities</li>
+				<li>Things You're Allergic To</li>
+				<li>Fictional Characters</li>
+				<li>Menu Items</li>
+				<li>Magazines</li>
+				<li>Capitals</li>
+				<li>Kinds Of Candy</li>
+				<li>Items You Save Up To Buy</li>
+				<li>Footwear</li>
+				<li>Something You Keep Hidden</li>
+				<li>Items In A Suitcase</li>
+				<li>Things With Tails</li>
+				<li>Sports Equipment</li>
+				<li>Crimes</li>
+				<li>Nicknames</li>
+				<li>Things In The Sky</li>
+				<li>Pizza Toppings</li>
+				<li>Colleges/ Universities</li>
+				<li>Fish</li>
+				<li>Countries</li>
+				<li>Things That Have Spots</li>
+				<li>Historical Figures</li>
+				<li>Something You're Afraid Of</li>
+				<li>Terms Of Measurement</li>
+				<li>Items In This Room</li>
+				<li>Book Titles</li>
+				<li>Heroes</li>
+				<li>Gifts/ Presents</li>
+				<li>Terms Of Endearment</li>
+				<li>Kinds Of Dances</li>
+				<li>Things That Are Black</li>
+				<li>Vehicles</li>
+				<li>Tropical Locations</li>
+				<li>College Majors</li>
+				<li>Dairy Products</li>
+				<li>Things In A Souvenir Shop</li>
+				<li>Items In Your Purse/ Wallet</li>
+				<li>World Records</li>
+				<li>Restaurants</li>
+				<li>Notorious People</li>
+				<li>Fruits</li>
+				<li>Things In A Medicine Cabinet</li>
+				<li>Toys</li>
+				<li>Household Chores</li>
+				<li>Bodies Of Water</li>
+				<li>Authors</li>
+				<li>Halloween Costumes</li>
+				<li>Weapons</li>
+				<li>Things That Are Round</li>
+				<li>Words Associated With Exercise</li>
+				<li>Famous Females</li>
+				<li>Medicine/ Drugs</li>
+				<li>Things Made Of Metal</li>
+				<li>Hobbies</li>
+				<li>People In Uniform</li>
+				<li>Animals</li>
+				<li>Languages</li>
+				<li>Names Used In The Bible</li>
+				<li>Junk Food</li>
+				<li>Things That Grow</li>
+				<li>Companies</li>
+				<li>Baby Foods</li>
+				<li>Famous Duos And Trios</li>
+				<li>Things Found In A Desk</li>
+				<li>Vacation Spots</li>
+				<li>Diseases</li>
+				<li>Words Associated With Money</li>
+				<li>Items In A Vending Machine</li>
+				<li>Movie Titles</li>
+				<li>Games</li>
+				<li>Things That You Wear</li>
+				<li>Beers</li>
+				<li>Things At A Circus</li>
+				<li>Holiday Gifts</li>
+				<li>Holiday Song Names</li>
+				<li>Thanksgiving Dishes</li>
+				<li>Types Of Christmas Ornaments</li>
+				<li>Holiday Traditions</li>
+				<li>Winter Activities</li>
+				<li>Spectator Events</li>
+				<li>Hot Beverages</li>
+				<li>Woodland Creatures</li>
+				<li>New Year's Resolutions</li>
+				<li>Things To Look Forward To</li>
+				<li>Mammals</li>
+				<li>Things That You Drive</li>
+				<li>Free Activities</li>
+				<li>Places To Spend Money</li>
+				<li>Cartoon Characters</li>
+				<li>Sea Creatures</li>
+				<li>Comedy Movies</li>
+				<li>Children's Books</li>
+				<li>Things At A Picnic</li>
+				<li>Athletes</li>
+				<li>Frozen Foods</li>
+			</ol>
+		</div>
+	</main>
+	<footer>
+		<textarea id="listToCopy"></textarea>
+		<p>v1.2.1 - December 29, 2020</p>
+		<div class="info" onclick="showVersionHistory()">i</div>
+		<div id="versionLog">
+			<div id="versionLogBox">
+				<div id="closeVersions" onclick="hideVersionHistory()">x</div>
+				<h3>version log</h3>
+				<div class="version">
+					<h4>v1.2.1</h4>
+					<p>2020-12-29</p>
+					<ul>
+						<li>fix double list-generation click bug</li>
+					</ul>
+				</div>
+				<div class="version">
+					<h4>v1.2.0</h4>
+					<p>2020-12-29</p>
+					<ul>
+						<li>populate list items from PDF lists 7-12 + holiday list + others</li>
+						<li>add "copy list to clipboard" button</li>
+						<li>update list to be blank on initial page load</li>
+						<li>fix version log viewer functionality</li>
+						<li>fix double-dice-roll bug</li>
+					</ul>
+				</div>
+				<div class="version">
+					<h4>v1.1.0</h4>
+					<p>2020-12-28</p>
+					<ul>
+						<li>build timer</li>
+						<li>add version log functionality</li>
+						<li>add additional styling updates</li>
+						<li>animate rolling of letter dice</li>
+						<li>animate rolling of list items</li>
+					</ul>
+				</div>
+				<div class="version">
+					<h4>v1.0.0</h4>
+					<p>2020-12-24 (initial build)</p>
+					<ul>
+						<li>build letter roller</li>
+						<li>build list generator</li>
+						<li>populate list items from PDF lists 1-6</li>
+						<li>build version log</li>
+						<li>apply basic styling to page and elements</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			
+
+		<script type="text/javascript"> // list generation
+			const listShuffle = document.getElementById("listShuffle");
+			const listOptions = document.getElementById("allListItems").getElementsByTagName("li");
+			const generatedList = document.getElementById("generatedList");
+			let flips = 0;
+			let flipCounter;
+			let firstTime = true;
+			generating = false;
+
+			function generateList() {
+				if (!generating) {
+					clearList();
+					listShuffle.play();
+					flipCounter = setInterval(fillList, 80);
+					generating = true;
+				}
+			}
+
+			function fillList() {
+				if (flips < 12) {
+					var randomNum = Math.floor(Math.random() * listOptions.length);
+					generatedList.appendChild(listOptions[randomNum]);
+					flips++;
+				} else {
+					clearInterval(flipCounter);
+					flips = 0;
+					generating = false;
+				}
+			}
+
+			function clearList() {
+				const listOptions = document.getElementById("allListItems");
+				const htmlList = generatedList.getElementsByTagName("li");
+				
+				if (firstTime) {
+					while(htmlList.length > 0) {
+						generatedList.removeChild(htmlList[0]);
+					}
+					firstTime = false;
+				} else {
+					while(htmlList.length > 0) {
+						listOptions.appendChild(htmlList[0]);
+					}
+				}
+			}
+		</script>
+		<script type="text/javascript"> // dice rolling
+			const letterBox = document.getElementById("letter");
+			const diceFX = document.getElementById("diceFX");
+			let clacks = 0;
+			let rollCounter;
+			let letterList = [];
+			let rolling = false;
+
+			function rollLetter() {
+				if (!rolling) {
+					const letterSelection = ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "U", "V", "W", "Y"];
+
+					for(let i=12; i>0; i--) {
+						const randLetter = Math.floor(Math.random() * letterSelection.length);
+						if(randLetter == letterSelection.length) {
+							randLetter--;
+						}
+						letterList.push(letterSelection[randLetter]);
+					}
+					
+					rolling = true;
+					diceFX.play();
+					rollCounter = setInterval(diceRoll, 100);
+				}
+			}
+
+			function diceRoll() {
+				if (clacks < 12) {
+					letterBox.innerHTML = letterList[clacks];
+					clacks++;
+				} else {
+					clearInterval(rollCounter);
+					clacks = 0;
+					letterList = [];
+					rolling = false;
+				}
+			}
+		</script>
+		<script type="text/javascript"> // timer
+			const timer = document.getElementById("timer");
+			const timerBtn = document.getElementById("timerBtn");
+			const ding = document.getElementById("ding");
+			let timerGo = false;
+			let counter;
+			let timerMin = 0;
+			let timerSec = 0;
+
+			function startStopCountdown(min=3, sec=0) {
+				timerMin = min;
+				timerSec = sec;
+				updateTimerText();
+
+				if (timerGo == false) {
+					counter = setInterval(countdownTimer, 1000);
+					timerBtn.innerHTML = "Reset Timer";
+					timerGo = true;
+				} else {
+					clearInterval(counter);
+					timerBtn.innerHTML = "Start Timer";
+					timerGo = false;
+				}
+			}
+
+			function countdownTimer() {
+				if (timerSec > 0) {
+					timerSec--;
+				} else if (timerMin > 0) {
+					timerSec = 59;
+					timerMin--;
+				} else {
+					ding.play();
+					clearInterval(counter);
+					timerBtn.innerHTML = "Start Timer";
+					timerGo = false;
+				}
+
+				updateTimerText();
+			}
+
+			function updateTimerText() {
+				timer.innerHTML = timerMin + ":" + doubleDigit(timerSec);
+			}
+
+			function doubleDigit(num) {
+				if (num.toString().length == 2) {
+					return num;
+				} else {
+					return "0" + num.toString();
+				}
+			}
+		</script>
+		<script type="text/javascript"> // copy to clipboard
+			const popUp = document.getElementById("copiedPopup");
+			const copyList = document.getElementById("listToCopy");
+			let fadeTimer = 30;
+			let fade;
+
+			function copyListToClipboard() {
+				populateCopyList();
+				copyList.select();
+				document.execCommand("copy");
+
+				popUp.style.display = "block";
+				fadeTimer = 30;
+				fade = setInterval(popUpFade, 100);
+			}
+
+			function populateCopyList() {
+				copyList.value = "";
+				let currentList = document.getElementById("generatedList").getElementsByTagName("li");
+				for (let i=0;i<12;i++) {
+					if (i<11) {
+						copyList.value += (i+1).toString() + ". " + currentList[i].innerHTML + "\n";
+					} else {
+						copyList.value += (i+1).toString() + ". " + currentList[i].innerHTML;
+					}
+				}
+			}
+
+			function popUpFade() {
+				if (fadeTimer>20) {
+					fadeTimer--;
+				} else if (fadeTimer>0) {
+					popUp.style.opacity-=.05;
+					fadeTimer--;
+				} else {
+					popUp.style.display = "none";
+					popUp.style.opacity=1;
+					clearInterval(fade);
+				}
+			}
+		</script>
+		<script type="text/javascript"> // version history
+			function showVersionHistory() {
+				document.getElementById("versionLog").style.display = "flex";
+			}
+
+			function hideVersionHistory() {
+				document.getElementById("versionLog").style.display = "none";
+			}
+		</script>
+	</footer>
+</body>
+</html>
